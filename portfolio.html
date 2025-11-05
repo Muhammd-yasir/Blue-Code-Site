@@ -1,0 +1,126 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Our portfolio - See our latest projects and work">
+<meta name="keywords" content="portfolio, web development projects, design work, case studies">
+<meta name="author" content="BlueCode Team">
+<title>Portfolio - BlueCode</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+    loadpage("base.html",`
+
+    <section class="py-5 bg-primary text-white">
+        <div class="container py-4">
+                <h1 class="display-4 fw-bold">Our Portfolio</h1>
+                <p class="lead">See our latest projects and successful case studies</p>
+            </div>
+        </section>
+     
+        <section class="py-5">
+            <div class="container">
+                <div class="row g-4">
+                  
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card portfolio-card border-0 shadow-sm h-100">
+                            <div class="portfolio-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <h5 class="text-muted">E-commerce Website</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">TechShop Online Store</h5>
+                                <p class="card-text">A fully responsive e-commerce platform with secure payment integration and inventory management.</p>
+                                <button class="btn btn-outline-primary view-project" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="1">View Project</button>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card portfolio-card border-0 shadow-sm h-100">
+                            <div class="portfolio-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <h5 class="text-muted">Mobile Application</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">FitTrack Fitness App</h5>
+                                <p class="card-text">A cross-platform mobile application for tracking workouts, nutrition, and fitness goals.</p>
+                                <button class="btn btn-outline-primary view-project" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="2">View Project</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card portfolio-card border-0 shadow-sm h-100">
+                            <div class="portfolio-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <h5 class="text-muted">Corporate Website</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Global Finance Corp</h5>
+                                <p class="card-text">A modern corporate website with investor relations portal and secure client dashboard.</p>
+                                <button class="btn btn-outline-primary view-project" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="3">View Project</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card portfolio-card border-0 shadow-sm h-100">
+                            <div class="portfolio-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <h5 class="text-muted">Web Application</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">ProjectFlow SaaS</h5>
+                                <p class="card-text">A project management SaaS application with real-time collaboration and analytics.</p>
+                                <button class="btn btn-outline-primary view-project" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="4">View Project</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card portfolio-card border-0 shadow-sm h-100">
+                            <div class="portfolio-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <h5 class="text-muted">UI/UX Design</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">TravelEase Booking Platform</h5>
+                                <p class="card-text">Complete UI/UX redesign for a travel booking platform focusing on user experience.</p>
+                                <button class="btn btn-outline-primary view-project" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="5">View Project</button>
+                            </div>
+                        </div>
+                    </div>
+                 
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card portfolio-card border-0 shadow-sm h-100">
+                            <div class="portfolio-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <h5 class="text-muted">Brand Identity</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">NovaTech Branding</h5>
+                                <p class="card-text">Complete brand identity design including logo, style guide, and marketing materials.</p>
+                                <button class="btn btn-outline-primary view-project" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="6">View Project</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="projectModalLabel">Project Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="project-content">
+                      
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+`);
+ </script>
