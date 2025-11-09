@@ -1,96 +1,5 @@
-function loadpage(baseFile, content) {
-    document.write(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta name="description" content="BlueCode - Professional Web Development & Digital Solutions">
-            <meta name="keywords" content="web development, digital solutions, coding, design, portfolio">
-            <meta name="author" content="BlueCode Team">
-            <title>BlueCode - Professional Web Development</title>
-            
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="assets/css/main.css">
-        </head>
-        <body>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="container">
-                    <a class="navbar-brand" href="index.html">
-                        <span class="text-primary">Blue</span>Code
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="index.html">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="about.html">About</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="services.html">Services</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="portfolio.html">Portfolio</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="blog.html">Blog</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="contact.html">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
-            <main>
-                ${content}
-            </main>
-
-            <footer class="bg-dark text-white py-4 mt-5">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <h5><span class="text-primary">Blue</span>Code</h5>
-                            <p>Professional web development and digital solutions for your business.</p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <h5>Quick Links</h5>
-                            <ul class="list-unstyled">
-                                <li><a href="index.html" class="text-white">Home</a></li>
-                                <li><a href="about.html" class="text-white">About</a></li>
-                                <li><a href="services.html" class="text-white">Services</a></li>
-                                <li><a href="portfolio.html" class="text-white">Portfolio</a></li>
-                                <li><a href="blog.html" class="text-white">Blog</a></li>
-                                <li><a href="contact.html" class="text-white">Contact</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <h5>Contact Info</h5>
-                            <p>Email: info@bluecode.com</p>
-                            <p>Phone: +1 (555) 123-4567</p>
-                            <p>Address: 123 Tech Street, Digital City</p>
-                        </div>
-                    </div>
-                    <hr class="bg-white">
-                    <div class="text-center">
-                        <p>&copy; 2023 BlueCode. All rights reserved.</p>
-                    </div>
-                </div>
-            </footer>
-
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="assets/js/main.js"></script>
-        </body>
-        </html>
-    `);
-}
-
 document.addEventListener('DOMContentLoaded', function() {
+    initSkipLink();
     initSmoothScroll();
     initContactForm();
     initPortfolioModal();
@@ -100,16 +9,31 @@ document.addEventListener('DOMContentLoaded', function() {
     setActiveNavLink();
 });
 
+function initSkipLink() {
+    const skipLink = document.createElement('a');
+    skipLink.href = '#main-content';
+    skipLink.className = 'skip-link';
+    skipLink.textContent = 'Skip to main content';
+    document.body.insertBefore(skipLink, document.body.firstChild);
+    
+    const mainContent = document.querySelector('main');
+    if (mainContent && !mainContent.id) {
+        mainContent.id = 'main-content';
+    }
+}
+
 function setActiveNavLink() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
     
     navLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage) {
+        if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
             link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
         } else {
             link.classList.remove('active');
+            link.removeAttribute('aria-current');
         }
     });
 }
@@ -119,19 +43,22 @@ function initSmoothScroll() {
     
     links.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                e.preventDefault();
                 const offsetTop = targetElement.offsetTop - 80;
                 
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
                 });
+                
+                targetElement.setAttribute('tabindex', '-1');
+                targetElement.focus();
+                targetElement.removeAttribute('tabindex');
             }
         });
     });
@@ -149,10 +76,16 @@ function initContactForm() {
             }
         });
         
-        const inputs = contactForm.querySelectorAll('input, textarea');
+        const inputs = contactForm.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
             input.addEventListener('blur', function() {
                 validateField(this);
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    validateField(this);
+                }
             });
         });
     }
@@ -178,13 +111,21 @@ function validateField(field) {
 
     field.classList.remove('is-valid', 'is-invalid');
     
+    const errorElement = field.parentNode.querySelector('.invalid-feedback');
+    
     if (field.hasAttribute('required') && value === '') {
         field.classList.add('is-invalid');
+        if (errorElement) {
+            errorElement.textContent = 'This field is required';
+        }
         isValid = false;
     } else if (field.type === 'email' && value !== '') {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value)) {
             field.classList.add('is-invalid');
+            if (errorElement) {
+                errorElement.textContent = 'Please enter a valid email address';
+            }
             isValid = false;
         }
     }
@@ -220,8 +161,13 @@ function submitContactForm() {
             input.classList.remove('is-valid', 'is-invalid');
         });
         
-        submitBtn.textContent = originalText;
+        submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
+        
+        const alert = messageDiv.querySelector('.alert');
+        if (alert) {
+            alert.focus();
+        }
         
         messageDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 2000);
@@ -354,12 +300,24 @@ function initPortfolioModal() {
                 if (project) {
                     modalTitle.textContent = project.title;
                     modalContent.innerHTML = `
-                        <h5>${project.title}</h5>
+                        <h2 class="h5">${project.title}</h2>
                         <p class="text-muted">${project.description}</p>
                         ${project.details}
                     `;
+                    
+                    const firstFocusable = modalContent.querySelector('a, button, input, [tabindex]');
+                    if (firstFocusable) {
+                        setTimeout(() => firstFocusable.focus(), 100);
+                    }
                 }
             });
+        });
+        
+        modal.addEventListener('shown.bs.modal', function() {
+            const firstFocusable = modalContent.querySelector('a, button, input, [tabindex]');
+            if (firstFocusable) {
+                firstFocusable.focus();
+            }
         });
     }
 }
@@ -370,22 +328,37 @@ function initBlogFilter() {
     
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            const currentActive = document.querySelector('.filter-btn.active');
+            if (currentActive) {
+                currentActive.classList.remove('active');
+                currentActive.setAttribute('aria-pressed', 'false');
+            }
             
-            const filter = this.getAttribute('data-filter');            
-        
+            this.classList.add('active');
+            this.setAttribute('aria-pressed', 'true');
+            
+            const filter = this.getAttribute('data-filter');
+            let visibleCount = 0;
+            
             blogPosts.forEach(post => {
                 if (filter === 'all' || post.getAttribute('data-category') === filter) {
                     post.style.display = 'block';
+                    post.removeAttribute('aria-hidden');
+                    visibleCount++;
                     setTimeout(() => {
                         post.classList.add('fade-in');
                     }, 10);
                 } else {
                     post.style.display = 'none';
                     post.classList.remove('fade-in');
+                    post.setAttribute('aria-hidden', 'true');
                 }
             });
+            
+            const loadMoreBtn = document.getElementById('load-more');
+            if (loadMoreBtn) {
+                loadMoreBtn.style.display = visibleCount === 0 ? 'none' : 'block';
+            }
         });
     });
 }
@@ -420,6 +393,7 @@ function initLoadMore() {
             const originalText = this.textContent;
             this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
             this.disabled = true;
+            this.setAttribute('aria-label', 'Loading more blog posts');
             
             setTimeout(() => {
                 newPosts.forEach((post, index) => {
@@ -429,25 +403,30 @@ function initLoadMore() {
                     postElement.setAttribute('data-category', post.category);
                     
                     let badgeClass = 'bg-primary';
-                    if (post.category === 'ui-ux') badgeClass = 'bg-success';
-                    if (post.category === 'mobile') badgeClass = 'bg-info';
-                    if (post.category === 'seo') badgeClass = 'bg-warning';
+                    let categoryText = 'Web Development';
+                    
+                    if (post.category === 'ui-ux') {
+                        badgeClass = 'bg-success';
+                        categoryText = 'UI/UX Design';
+                    } else if (post.category === 'mobile') {
+                        badgeClass = 'bg-info';
+                        categoryText = 'Mobile Apps';
+                    } else if (post.category === 'seo') {
+                        badgeClass = 'bg-warning';
+                        categoryText = 'SEO & Marketing';
+                    }
                     
                     postElement.innerHTML = `
                         <div class="card blog-card border-0 shadow-sm h-100">
                             <div class="blog-image bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <h5 class="text-muted">${post.category === 'web-dev' ? 'Web Development' : 
-                                                         post.category === 'ui-ux' ? 'UI/UX Design' : 
-                                                         post.category === 'mobile' ? 'Mobile Apps' : 'SEO & Marketing'}</h5>
+                                <h5 class="text-muted">${categoryText}</h5>
                             </div>
                             <div class="card-body">
-                                <span class="badge ${badgeClass} mb-2">${post.category === 'web-dev' ? 'Web Development' : 
-                                                                       post.category === 'ui-ux' ? 'UI/UX Design' : 
-                                                                       post.category === 'mobile' ? 'Mobile Apps' : 'SEO & Marketing'}</span>
-                                <h5 class="card-title">${post.title}</h5>
+                                <span class="badge ${badgeClass} mb-2">${categoryText}</span>
+                                <h3 class="card-title h5">${post.title}</h3>
                                 <p class="card-text">${post.excerpt}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">${post.date}</small>
+                                    <time class="text-muted" datetime="${new Date(post.date).toISOString().split('T')[0]}">${post.date}</time>
                                     <a href="#" class="btn btn-sm btn-outline-primary">Read More</a>
                                 </div>
                             </div>
@@ -457,50 +436,85 @@ function initLoadMore() {
                     blogPostsContainer.appendChild(postElement);
                 });
                 
-                this.textContent = originalText;
+                this.innerHTML = originalText;
                 this.disabled = false;
+                this.removeAttribute('aria-label');
                 
                 if (blogPostsContainer.children.length >= 9) {
                     this.style.display = 'none';
+                    this.setAttribute('aria-hidden', 'true');
                 }
+                
+                const newPostElements = blogPostsContainer.querySelectorAll('.blog-post:not(.fade-in)');
+                newPostElements.forEach(post => {
+                    post.classList.add('fade-in');
+                });
             }, 1500);
         });
     }
 }
 
 function initAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
+    if ('IntersectionObserver' in window) {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+         
+        const elementsToAnimate = document.querySelectorAll('.card, section, .team-image');
+        elementsToAnimate.forEach(element => {
+            if (!element.classList.contains('fade-in')) {
+                observer.observe(element);
             }
         });
-    }, observerOptions);
-     
-    const elementsToAnimate = document.querySelectorAll('.card, section');
-    elementsToAnimate.forEach(element => {
-        observer.observe(element);
-    });
+    }
 }
 
 function showAlert(message, type = 'success') {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.setAttribute('role', 'alert');
     alertDiv.innerHTML = `
         ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close alert message"></button>
     `;
     
-    document.body.appendChild(alertDiv);
+    const mainContent = document.querySelector('main') || document.body;
+    mainContent.insertBefore(alertDiv, mainContent.firstChild);
+    
+    alertDiv.focus();
     
     setTimeout(() => {
         if (alertDiv.parentElement) {
-            alertDiv.parentElement.removeChild(alertDiv);
+            const bsAlert = new bootstrap.Alert(alertDiv);
+            bsAlert.close();
         }
     }, 5000);
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modals = document.querySelectorAll('.modal.show');
+        modals.forEach(modal => {
+            const bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+        });
+        
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }
+});
