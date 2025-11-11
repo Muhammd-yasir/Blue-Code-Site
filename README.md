@@ -22,5 +22,3 @@ The website contains **7 pages**, all sharing a consistent structure and design 
 - ✅ Interactive elements (forms, modals, filters) using JS  
 - ✅ SEO-friendly meta tags and structure  
 - ✅ Clean, readable, and organized code  
-
----
